@@ -1,0 +1,18 @@
+{
+    "nom": "Juliette", //this name is shown once at the bot initisalization. this is currently not used for any functionnality
+    "jetton": "", //discord bot token
+    "prefix": "j/", //bot command prefix
+    "notifTag_prefix": "j#", //prefix that is detected when a notification request is sent
+    "reddit_id_client": "", //reddit client id (unused)
+    "redditClientSecret": "", //reddit client secret (unused)
+    "redditMotPasse":"", //reddit password (unused)
+    "redditUtilisateurAgent":"", //idk what this is (unused)
+    "redditNomUtilisateur": "", //reddit username (unused)
+    "cleSteam": "", //steam api key (unused)
+    "cleDestiny": "", //bungie api key (unused)
+    "bd_nom_utilisateur": "", //database username
+    "bd_nom_hote": "", //database host
+    "bd_mot_passe": "", //database password
+    "bd_nom": "", //database name
+    "max_cmdThreads": 3 //maximum amount of command threads that can be allocated at once.
+}
