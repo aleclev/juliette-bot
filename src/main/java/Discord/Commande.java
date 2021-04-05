@@ -11,7 +11,7 @@ public abstract class Commande extends Thread {
     public Commande() {}
 
     /**
-     *
+     * Creates a command
      * @param p_bot Le bot maître.
      */
     public Commande(Bot p_bot) {
@@ -23,8 +23,10 @@ public abstract class Commande extends Thread {
     }
 
     /**
+     * This method is called when a command is requested
+     *
      * Cette méthode est appelée par Bot pour signaler qu'une commande doît être exécutée.
-     * La méthode créer une instance de CommandThread afin d'exécuter la commande dans un thread.
+     * La méthode crée une instance de CommandThread afin d'exécuter la commande dans un thread.
      * @param evt L'événement qui a provoqué l'appel de la commande (Méthode surchargée pour chaque type d'événement.)
      */
     public CommandThread call(MessageEventAdapter evt) {
@@ -32,6 +34,8 @@ public abstract class Commande extends Thread {
     }
 
     /**
+     * This method represents the actual command treatment, i.e. what the command does
+     *
      * méthode étant appelée lors de l'exécution de la commande par un utilisateur
      * @param evt
      */
@@ -51,6 +55,11 @@ public abstract class Commande extends Thread {
         return false;
     }
 
+    /**
+     * Returns a list of arguments in the message as a String List
+     * @param message
+     * @return
+     */
     public ArrayList<String> reqArgs(String message) {
         ArrayList<String> r = new ArrayList<>();
 
@@ -77,6 +86,10 @@ public abstract class Commande extends Thread {
         return l_nomsComplets;
     }
 
+    /**
+     *
+     * @return returns the command documentation as a string
+     */
     public String reqDocDiscord() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("```%s :\n", l_nomsComplets.get(0)));
@@ -102,9 +115,9 @@ public abstract class Commande extends Thread {
         exemple = ex;
     }
 
-    Bot bot; //référence vers le bot en haut.
-    List<String> l_nomsComplets;
-    String description;
-    String utilisation;
-    String exemple;
+    Bot bot;                        //référence vers le bot en haut.
+    List<String> l_nomsComplets;    //Complete command name
+    String description;             //Command description
+    String utilisation;             //Command usage
+    String exemple;                 //Command usage example
 }

@@ -1,3 +1,7 @@
+/**
+ * This class redirects events from the Interface layer to the Logic layer.
+ */
+
 package Controleurs;
 
 import Adapteurs.MessageEventAdapter;

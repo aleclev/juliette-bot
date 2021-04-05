@@ -35,6 +35,8 @@ public class CommandThread extends Thread {
     }
 
     /**
+     * Awaits a message input from a discord user.
+     *
      * Permet d'attendre la réponse d'un utilisateur quelconque dans Discord.
      * Commence par déclarer un CountdownLatch. Le latch est ouvert soit lorsqu'un
      * Message est vérifié par le verificateur, soit après le timeout.

@@ -1,3 +1,7 @@
+/**
+ * The Module class is in essence a list of commands.
+ */
+
 package Discord;
 
 import java.util.ArrayList;

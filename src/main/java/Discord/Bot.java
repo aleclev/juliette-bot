@@ -1,3 +1,7 @@
+/**
+ * This is the main class for the Logic layer. Contains a list of Modules and handles events.
+ */
+
 package Discord;
 
 import Accesseur.AccessMysql;
@@ -61,12 +65,16 @@ public class Bot {
         System.out.print("Tous les modules de commandes instanciés avec succès...\n");
     }
 
+    /**
+     * Add a module to the current bot
+     * @param module
+     */
     public void ajouterModule(Module module) {
         l_modules.add(module);
     }
 
     /**
-     *
+     * This function handles message events from the controller
      * @param evt
      */
     public void traitementMessage(MessageEventAdapter evt) {
@@ -102,6 +110,7 @@ public class Bot {
 
     /**
      * envoi l,event vers tous les cmdThreads. (l'event est gèré dans cmdThread)
+     * Broadcasts a messageEvent to all the current CommandThreads
      * @param evt
      */
     private void broadcastOnMessage(MessageEventAdapter evt) {
@@ -116,7 +125,7 @@ public class Bot {
     }
 
     /**
-     *
+     *  Attempts to allocate a command Thread
      * @param cmdThread
      * @return false si cmdThread n'a pas pu être ajouté exécuté.
      */
@@ -137,9 +146,15 @@ public class Bot {
         //cmdThreadListLock.unlock();
     }
 
+    /**
+     * Handles notification requests
+     * @param evt
+     * @throws SQLException
+     */
     private void traitementNotifTag(MessageEventAdapter evt) throws SQLException {
         ArrayList<String> l_tag = CommandParse.reqNotifTagList(evt.reqContenueRaw(), notifPrefix);
 
+        //returns if the message does not contain a notification request
         if (l_tag.size() == 0) {
             return;
         }

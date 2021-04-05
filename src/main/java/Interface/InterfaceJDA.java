@@ -1,3 +1,7 @@
+/**
+ * This class is an event listener. Events are sent to Controleur
+ */
+
 package Interface;
 
 import Adapteurs.MessageEventAdapterJDA;
