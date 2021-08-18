@@ -19,6 +19,12 @@
             <name>jcenter-bintray</name>
             <url>https://jcenter.bintray.com</url>
         </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -58,6 +64,13 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.cerus</groupId>
+            <artifactId>jda-slash-commands</artifactId>
+            <version>d130c7d927d982793bcbd2bcf8346e49b93009e1</version>
+        </dependency>
+
 
     </dependencies>
 

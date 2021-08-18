@@ -7,6 +7,7 @@ package Discord;
 import Accesseur.AccessMysql;
 import Adapteurs.*;
 import Commandes.*;
+import DTO.DestinyDTO;
 import Fonctions.CommandParse;
 import org.json.simple.JSONObject;
 
@@ -31,7 +32,11 @@ public class Bot {
     //private final AccessMysql accessMysql;
     private final MetaAdapter metaAdapter;
 
+    //config du fichier config.json
     private final JSONObject config;
+
+    //DTO destiny
+    private final DestinyDTO destinyDTO;
 
     public Bot(JSONObject p_config, MetaAdapter p_metaAdapter) {
         config = p_config;
@@ -53,6 +58,9 @@ public class Bot {
         metaAdapter = p_metaAdapter;
         cmdThreadListLock = new ReentrantLock();
 
+        //DTO
+        destinyDTO = new DestinyDTO(config);
+
         //Ajout des modules actifs
         l_modules = new ArrayList<>();
         this.ajouterModule(new Steam(this));
@@ -61,6 +69,7 @@ public class Bot {
         this.ajouterModule(new Tag(this));
         this.ajouterModule(new Notif(this));
         this.ajouterModule(new Meta(this));
+        this.ajouterModule(new Destiny(this));
 
         System.out.print("Tous les modules de commandes instanciés avec succès...\n");
     }
@@ -168,7 +177,7 @@ public class Bot {
         }
 
         if (p_nf == null) {
-            p_nf = new NotifTagCooldownDTO(evt.reqIdAuteur(), 30);
+            p_nf = new NotifTagCooldownDTO(evt.reqIdAuteur(), 40);
             l_notifCooldown.add(p_nf);
         }
 
@@ -195,5 +204,9 @@ public class Bot {
 
     public String reqPrefix() {
         return prefix;
+    }
+
+    public DestinyDTO reqDestinyDTO() {
+        return destinyDTO;
     }
 }

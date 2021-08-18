@@ -1,4 +1,5 @@
 import Interface.InterfaceJDA;
+import Interface.SlashInterfaceJDA;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -28,7 +29,10 @@ public class JulietteJDA {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .setRawEventsEnabled(true)
                 .build();
+
+        //new SlashInterfaceJDA(config, jda);
 
         jda.addEventListener(new InterfaceJDA(config, jda));
     }

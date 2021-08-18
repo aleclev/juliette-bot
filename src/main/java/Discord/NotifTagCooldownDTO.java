@@ -1,6 +1,8 @@
 package Discord;
 
+import java.awt.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class NotifTagCooldownDTO {
     public long discord_id;
@@ -16,26 +18,29 @@ public class NotifTagCooldownDTO {
     }
 
     public void logNotif() {
+        update();
+
+        messagesEnvoyes++;
+    }
+
+    public void update() {
         Timestamp courant = new Timestamp(System.currentTimeMillis());
 
-        //le temps s'est écoulé
-        if (courant.getTime() > ts.getTime() + cooldownMinutes * 60000) {
+        if (courant.getTime() < ts.getTime() + cooldownMinutes * 60000) {
+            //messagesEnvoyes++;
+        }
+        else {
             ts = courant;
-            messagesEnvoyes = 1;
-        } else {
-            messagesEnvoyes++;
-            if (!(messagesEnvoyes > 2)) {
-                ts = courant;
-            }
+            messagesEnvoyes = 0;
         }
     }
 
     public boolean peutPoster() {
-        return !(messagesEnvoyes > 2);
+        return messagesEnvoyes < 2;
     }
 
     public int tempsRestant() {
-        if (!(messagesEnvoyes > 2)) {
+        if (messagesEnvoyes < 2) {
             return 0;
         }
 

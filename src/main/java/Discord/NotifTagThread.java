@@ -44,11 +44,10 @@ public class NotifTagThread extends Thread {
             eb.setTitle(evt.reqContenueRaw());
         }
 
-        //prends en note la requête de notification courante.
-        notifTagCooldownDTO.logNotif();
+        notifTagCooldownDTO.update();
 
         if (!notifTagCooldownDTO.peutPoster()) {
-            evt.repondre(String.format("Notification demand rejected, you are still on cooldown for **%s minutes**...", notifTagCooldownDTO.tempsRestant()));
+            evt.repondre(String.format("Notification demand rejected, you are still on cooldown for **%s minute(s)**...", notifTagCooldownDTO.tempsRestant()));
             accessMysql.eteindre();
             return;
         }
@@ -79,17 +78,26 @@ public class NotifTagThread extends Thread {
             ResultSet rs = accessMysql.reqAbonnesNotifTags(l_tag);
 
             //Liste complets de tous les tags incluant les tags parents
-            StringBuilder messageBuilder = new StringBuilder("Detected notification request for the following tag(s): ");
+            StringBuilder messageBuilder = new StringBuilder("Detected notification request for tag(s): ");
             for (String tag : l_tag) {
                 messageBuilder.append(String.format(" `%s`", tag));
             }
             String message = messageBuilder.toString();
-            message += "...";
+            message += "... Executing...";
             evt.repondre(message);
 
             rs.last();
-            evt.repondre(String.format("**%s** user(s) found, sending notifications...", rs.getRow()));
+            int totUtilisateurs = rs.getRow();
             rs.beforeFirst();
+
+            if (totUtilisateurs == 0) {
+                evt.repondre("No users found in the provided tag(s). Demand discarded.");
+                return;
+            }
+            //evt.repondre(String.format("**%s** user(s) found, sending notifications...", rs.getRow()));
+
+            int totEnLigne = 0;
+
             while (rs.next()) {
                 try {
                     long discord_id = rs.getLong(1);
@@ -101,8 +109,13 @@ public class NotifTagThread extends Thread {
 
                     UserAdapter u = mem.reqUser();
 
-                    if (mem.estEnLigne() && !accessMysql.notifBlocageExiste(discord_id, evt.reqIdAuteur())) {
-                        u.messagePrive(eb);
+                    if (mem.estEnLigne()) {
+                        totEnLigne++;
+
+                        //Saute si l'utilisateur est bloqué
+                        if (!accessMysql.notifBlocageExiste(discord_id, evt.reqIdAuteur())) {
+                            u.messagePrive(eb);
+                        }
                     }
 
                 } catch (Exception e) {
@@ -110,10 +123,20 @@ public class NotifTagThread extends Thread {
                 }
             }
             accessMysql.eteindre();
-            evt.repondre("All notifications sent...");
+            //evt.repondre("All notifications sent...");
+
+            evt.repondre(String.format("All messages sent!\nOnline users found: **%s**\nTotal users found: **%s**", totEnLigne, totUtilisateurs));
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            //prends en note la requête de notification courante.
+            evt.repondre("An error occurred and prevented this command from being successfully executed.");
+            notifTagCooldownDTO.logNotif();
+            return;
         }
+
+        //prends en note la requête de notification courante.
+        notifTagCooldownDTO.logNotif();
     }
 
     private boolean utilisateurEnCooldown() {
