@@ -25,6 +25,7 @@ class roadmap extends Commande {
         ajouterNom("rm");
         setDescription("Fetches the current season's roadmap.");
         setUtilisation("j/roadmap");
+        makeSlashSherpaRun();
     }
 
     @Override

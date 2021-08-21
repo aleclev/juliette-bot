@@ -12,6 +12,7 @@ import Fonctions.VerificationMessage.VerificateurMemeContexte;
 
 import java.sql.Timestamp;
 
+//TODO: Permissions d'accès aux commandes classifiés.
 /**
  * @class Dev classe pour faire des tests directement dans discord.
  */

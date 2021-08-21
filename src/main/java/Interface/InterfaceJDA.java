@@ -7,8 +7,8 @@ package Interface;
 import Adapteurs.MessageEventAdapterJDA;
 import Adapteurs.MetaAdapterJDA;
 import Controleurs.Controleur;
-import de.cerus.jdasc.command.ApplicationCommandListener;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.json.simple.JSONObject;
@@ -29,7 +29,12 @@ public class InterfaceJDA extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent evt) {
         controleur.gestionnaireMessage(new MessageEventAdapterJDA(evt));
-        //System.out.print(evt.getMessage().getContentRaw()+"\n");
+    }
+
+    @Override
+    public void onSlashCommand(SlashCommandEvent evt) {
+        System.out.print("Commande slash reçue !");
+        controleur.gestionnaireMessage(new MessageEventAdapterJDA(evt));
     }
 
     private Controleur controleur;

@@ -1,15 +1,43 @@
 package Adapteurs;
 
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.InputStream;
 
 public class MessageEventAdapterJDA extends MessageEventAdapter {
-    private MessageReceivedEvent original;
+
+    private final MessageChannel salon;
+    private final User utilisateur;
+    private final Member member;
+    private final Guild guild;
+    private final Message message;
+    private final Boolean estSlash;
+    private final String contenu;
+    private final SlashCommandEvent slashCommandEvent;
+
 
     public MessageEventAdapterJDA(MessageReceivedEvent evt) {
-        original = evt;
+        salon = evt.getChannel();
+        utilisateur = evt.getAuthor();
+        guild = evt.getGuild();
+        message = evt.getMessage();
+        contenu = message.getContentRaw();
+        member = evt.getMember();
+        estSlash = false;
+        slashCommandEvent = null;
+    }
+
+    public MessageEventAdapterJDA(SlashCommandEvent evt) {
+        salon = evt.getChannel();
+        utilisateur = evt.getUser();
+        member = evt.getMember();
+        guild = evt.getGuild();
+        message = null;
+        contenu = evt.getName();
+        estSlash = true;
+        slashCommandEvent = evt;
     }
 
     /**
@@ -18,7 +46,12 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
      */
     @Override
     public void repondre(String message) {
-        original.getChannel().sendMessage(message).queue();
+        if (!estSlash) {
+            salon.sendMessage(message).queue();
+        }
+        else {
+            slashCommandEvent.reply(message).queue();
+        }
     }
 
     @Override
@@ -43,27 +76,31 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
     @Override
     public void repondre(EmbedBuilderAdapter embed) {
         embed.build();
-        original.getChannel().sendMessage((MessageEmbed) embed.build()).queue();
+        salon.sendMessage((MessageEmbed) embed.build()).queue();
     }
 
     @Override
     public void repondre(InputStream is, String nom) {
-        original.getChannel().sendFile(is, nom).queue();
+        salon.sendFile(is, nom).queue();
     }
 
     @Override
     public Long reqIdAuteur() {
-        return Long.parseLong(original.getAuthor().getId());
+        return Long.parseLong(utilisateur.getId());
     }
 
     @Override
     public Long reqIdSalon() {
-        return Long.parseLong(original.getChannel().getId());
+        return Long.parseLong(salon.getId());
     }
 
     @Override
     public String reqContenueRaw() {
-        return original.getMessage().getContentRaw();
+        if (estSlash) {
+            return contenu;
+        }
+
+        return message.getContentRaw();
     }
 
     @Override
@@ -73,21 +110,30 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
 
     @Override
     public UserAdapter reqUtilisateur() {
-        return new UserAdapterJDA(original.getAuthor());
+        return new UserAdapterJDA(utilisateur);
     }
 
     @Override
     public MemberAdapter reqMember() {
-        return new MemberAdapterJDA(original.getMember());
+        return new MemberAdapterJDA(member);
     }
 
     @Override
     public GuildAdapter reqGuild() {
-        return new GuildAdapterJDA(original.getGuild());
+        return new GuildAdapterJDA(guild);
     }
 
     @Override
     public String reqURL() {
-        return String.format("https://discordapp.com/channels/%s/%s/%s", original.getGuild().getId(), original.getChannel().getId(), original.getMessageId());
+        if (estSlash) {
+            return "No valid URL";
+        }
+
+        return String.format("https://discordapp.com/channels/%s/%s/%s", guild.getId(), salon.getId(), message.getId());
+    }
+
+    @Override
+    public Boolean estSlash() {
+        return estSlash;
     }
 }

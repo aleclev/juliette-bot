@@ -1,10 +1,10 @@
 import Interface.InterfaceJDA;
-import Interface.SlashInterfaceJDA;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -29,10 +29,12 @@ public class JulietteJDA {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableCache(CacheFlag.CLIENT_STATUS)
                 .setRawEventsEnabled(true)
                 .build();
+        jda.awaitReady();
 
-        //new SlashInterfaceJDA(config, jda);
+        System.out.print("JDA prêt!\n");
 
         jda.addEventListener(new InterfaceJDA(config, jda));
     }

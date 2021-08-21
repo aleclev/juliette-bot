@@ -31,6 +31,11 @@ public abstract class Module {
      */
     public void ajouterCommande(Commande commande) {
         l_commandes.add(commande);
+
+        //Ajoute la commande à une liste secondaire si elle est marquée comme slash.
+        if (commande.estSlash) {
+            l_commandes.add(commande);
+        }
     }
 
     public String reqNom () {
@@ -46,6 +51,7 @@ public abstract class Module {
     }
 
     List<Commande> l_commandes;
+    List<Commande> l_commandesSlash;
     Bot bot;
     String nom;
 }

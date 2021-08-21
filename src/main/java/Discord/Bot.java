@@ -90,7 +90,7 @@ public class Bot {
         broadcastOnMessage(evt);
 
         String rawMsg = evt.reqContenueRaw();
-        if (!CommandParse.estRequeteCommande(rawMsg, prefix)) {
+        if (!CommandParse.estRequeteCommande(rawMsg, prefix) && !evt.estSlash()) {
             try {
                 traitementNotifTag(evt);
             } catch (SQLException throwables) {
@@ -100,14 +100,20 @@ public class Bot {
             return;
         }
 
-        String msgSansPrefix = CommandParse.dePrefixer(rawMsg, prefix);
+        String msgSansPrefix = "";
+        if (evt.estSlash()) {
+            msgSansPrefix = evt.reqContenueRaw();
+        }
+        else {
+            msgSansPrefix = CommandParse.dePrefixer(rawMsg, prefix);
+        }
 
         for (Module module : l_modules) {
             for (Commande commande : module.l_commandes) {
-                if (commande.estAppele(msgSansPrefix)) {
+                if (commande.estAppelee(msgSansPrefix)) {
                     CommandThread cmdThread = commande.call(evt);
                     if (!ajouterCmdThread(cmdThread)) {
-                        evt.repondre("ERROR! Trafic excess, command was cancelled.");
+                        evt.repondre("ERROR! Traffic excess, command was cancelled.");
                     }
                     return;
                 }

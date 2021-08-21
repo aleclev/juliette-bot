@@ -2,6 +2,9 @@ package Adapteurs;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+
+import javax.annotation.Nonnull;
 
 public class MetaAdapterJDA extends MetaAdapter {
     public MetaAdapterJDA(JDA p_jda) {
@@ -24,5 +27,16 @@ public class MetaAdapterJDA extends MetaAdapter {
         }
     }
 
-    private JDA jda;
+    /**
+     * Retourne un adapteur pour Sherpa Run.
+     * @return
+     */
+    @Override
+    @Nonnull
+    public GuildAdapter getSherpaRun() {
+        Guild sr_jda = jda.getGuildById("439563888342859776");
+        return new GuildAdapterJDA(sr_jda);
+    }
+
+    private final JDA jda;
 }

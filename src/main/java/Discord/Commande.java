@@ -20,6 +20,7 @@ public abstract class Commande extends Thread {
         description = "No description given.";
         utilisation = "No usage given.";
         exemple = "No examples given.";
+        estSlash = false;
     }
 
     /**
@@ -46,9 +47,9 @@ public abstract class Commande extends Thread {
      * @param msg
      * @return
      */
-    public boolean estAppele(String msg) {
+    public boolean estAppelee(String msg) {
         for (String nom : l_nomsComplets) {
-            if (msg.toUpperCase().startsWith(nom.toUpperCase())) {
+            if (msg.toUpperCase().startsWith(nom.toUpperCase()) || msg.replace("_", " ").toUpperCase().startsWith(nom.toUpperCase())) {
                 return true;
             }
         }
@@ -103,14 +104,26 @@ public abstract class Commande extends Thread {
         return sb.toString();
     }
 
+    /**
+     * Enregistre la commande comme slash, mais seulement pour Sherpa Run.
+     */
+    public void makeSlashSherpaRun() {
+        if (l_nomsComplets.isEmpty()) {
+            System.out.print("Erreur dans la création d'une commande slash (aucun nom valie).");
+            return;
+        }
+        String nom = l_nomsComplets.get(0).replace(" ", "_");
+        bot.reqMetaAdapter().getSherpaRun().creerSlashCommande(nom, description);
+        estSlash = true;
+        System.out.printf("Commande slash créée. Nom: %s, Description: %s\n", nom, description);
+    }
+
     public void setDescription(String desc) {
         description = desc;
     }
-
     public void setUtilisation(String p_u) {
         utilisation = p_u;
     }
-
     public void setExemple(String ex) {
         exemple = ex;
     }
@@ -120,4 +133,5 @@ public abstract class Commande extends Thread {
     String description;             //Command description
     String utilisation;             //Command usage
     String exemple;                 //Command usage example
+    Boolean estSlash;               // Indique si la commande est implémentée avec slash
 }

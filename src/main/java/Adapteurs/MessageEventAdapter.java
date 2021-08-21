@@ -18,6 +18,7 @@ public abstract class MessageEventAdapter {
     public abstract MemberAdapter reqMember();
     public abstract GuildAdapter reqGuild();
     public abstract String reqURL();
+    public abstract Boolean estSlash();
 
     //messages génériques
     //DNE : does not exist

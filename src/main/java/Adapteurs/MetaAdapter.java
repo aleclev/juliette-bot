@@ -7,6 +7,8 @@ public abstract class MetaAdapter {
     //public abstract UserAdapter trouverUtilisateurUncached(long discord_id);
     public abstract void setStatusText(PRESENCE pres, String text);
 
+    public abstract GuildAdapter getSherpaRun();
+
     public enum PRESENCE {
         RIEN,
         JOUE,

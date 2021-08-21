@@ -3,6 +3,7 @@ package Adapteurs;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import net.dv8tion.jda.api.utils.concurrent.Task;
 
 import java.util.ArrayList;
@@ -34,6 +35,13 @@ public class GuildAdapterJDA extends GuildAdapter {
             r.add(new MemberAdapterJDA(mem));
         }
         return r;
+    }
+
+    @Override
+    public void creerSlashCommande(String nom, String desc) {
+        //TODO: Ajouter plus de paramètres à la création de commandes slash.
+        CommandCreateAction ca = original.upsertCommand(nom, desc);
+        ca.queue();
     }
 
     Guild original;

@@ -25,6 +25,7 @@ class Ping extends Commande {
         setDescription("Juliette responds with Pong!. Used to see if she is online.");
         setUtilisation("j/ping");
         setExemple("j/ping");
+        makeSlashSherpaRun();
     }
 
     @Override

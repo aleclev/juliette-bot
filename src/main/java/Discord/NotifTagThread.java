@@ -60,7 +60,7 @@ public class NotifTagThread extends Thread {
         Color randomColor = new Color(r, g, b);
         eb.addField("Sender", String.format("%s", evt.reqUtilisateur().reqMention()), false);
         eb.addField("Message URL", String.format("[Click to go to message](%s)", evt.reqURL()), false);
-        eb.addField("Main server", "[Report bugs & get help](https://discord.gg/fsW94cN)", false);
+        eb.addField("Report Problems", "[Report bugs & get help here](https://discord.com/channels/439563888342859776/878759972962447371/)\n[Join Sherpa Run](https://discord.gg/YC4gXxN)", false);
         eb.setThumbnail("https://cdn.discordapp.com/attachments/740374907883618365/818240712633221140/searchpng.com-notification-icon-png-image-free-download-2.png");
         eb.setFooter(String.format("j/notif block %s to no longer receive notifications from this user", evt.reqIdAuteur()), null);
         eb.setColor(randomColor);
