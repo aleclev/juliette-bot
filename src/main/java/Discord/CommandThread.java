@@ -24,7 +24,7 @@ public class CommandThread extends Thread {
                 return;
             }
             try {
-                System.out.printf("Aucun type d'événement valide pour la commande : %s\n", cmd.l_nomsComplets.get(0)); //TODO : vérifier le fonctionnement de ce code
+                System.out.printf("Aucun type d'événement valide pour la commande : %s\n", cmd.reqNoms().get(0)); //TODO : vérifier le fonctionnement de ce code
             } catch (Exception e) {
             }
 

@@ -1,6 +1,7 @@
 package Discord;
 
 import Adapteurs.MessageEventAdapter;
+import Exceptions.NoArgumentsInCommand;
 import Fonctions.CommandParse;
 
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public abstract class Commande extends Thread {
         description = "No description given.";
         utilisation = "No usage given.";
         exemple = "No examples given.";
-        estSlash = false;
+        slash = false;
+        signature = new ArrayList<>();
     }
 
     /**
@@ -113,9 +115,62 @@ public abstract class Commande extends Thread {
             return;
         }
         String nom = l_nomsComplets.get(0).replace(" ", "_");
-        bot.reqMetaAdapter().getSherpaRun().creerSlashCommande(nom, description);
-        estSlash = true;
+        bot.reqMetaAdapter().getSherpaRun().creerSlashCommande(nom, description, signature);
+        slash = true;
         System.out.printf("Commande slash créée. Nom: %s, Description: %s\n", nom, description);
+    }
+
+    /**
+     * Ajoute un nouvel argument à la signature.
+     * @param type Le type.
+     * @param opt True si l'argument est optionel.
+     */
+    public void ajouterArg(String nom, String desc, Argument.Type type, Boolean opt) {
+        signature.add(new Argument(nom, desc, type, opt));
+    }
+
+    public List<Argument> creerArguments(MessageEventAdapter evt) {
+        //if (signature.size() == 0) {
+        //   throw new NoArgumentsInCommand();
+        //}
+
+        List<Argument> args = new ArrayList<>();
+        String nouv = "";
+
+        if (evt.estSlash()) {
+
+        }
+        else {
+            String prefix = reqBot().reqPrefix();
+            String call = CommandParse.dePrefixer(evt.reqContenueRaw(), prefix);
+            boolean skip = true;
+
+            for (String nom : l_nomsComplets) {
+                if (call.startsWith(nom)) {
+                    nom = nom + " ";
+                    nouv = call.replace(nom, "");
+                    skip = false;
+                    break;
+                }
+            }
+            if (skip) {
+                return args;
+            }
+
+            String[] l_s;
+
+            l_s = CommandParse.decouperCommande(nouv);
+
+            for (int i = 0; i < l_s.length && i < signature.size(); i++) {
+                args.add(Argument.stringToArgument(l_s[i], signature.get(i).reqType()));
+            }
+        }
+
+        return args;
+    }
+
+    public Boolean estSlash() {
+        return slash;
     }
 
     public void setDescription(String desc) {
@@ -128,10 +183,11 @@ public abstract class Commande extends Thread {
         exemple = ex;
     }
 
-    Bot bot;                        //référence vers le bot en haut.
-    List<String> l_nomsComplets;    //Complete command name
-    String description;             //Command description
-    String utilisation;             //Command usage
-    String exemple;                 //Command usage example
-    Boolean estSlash;               // Indique si la commande est implémentée avec slash
+    private Bot bot;                        //référence vers le bot en haut.
+    private List<String> l_nomsComplets;    //Complete command name
+    private String description;             //Command description
+    private String utilisation;             //Command usage
+    private String exemple;                 //Command usage example
+    private Boolean slash;                  // Indique si la commande est implémentée avec slash
+    private List<Argument> signature;   //Optionel. Décrit les arguments de la commande.
 }

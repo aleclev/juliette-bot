@@ -33,7 +33,7 @@ public abstract class Module {
         l_commandes.add(commande);
 
         //Ajoute la commande à une liste secondaire si elle est marquée comme slash.
-        if (commande.estSlash) {
+        if (commande.estSlash()) {
             l_commandes.add(commande);
         }
     }

@@ -1,10 +1,9 @@
 package Commandes;
 
 import Adapteurs.MessageEventAdapter;
-import Discord.Bot;
-import Discord.CommandThread;
-import Discord.Commande;
+import Discord.*;
 import Discord.Module;
+import java.util.List;
 
 public class Misc extends Module {
     public Misc(Bot bot) {
@@ -13,6 +12,8 @@ public class Misc extends Module {
         //liste des commandes,
         this.ajouterCommande(new Ping(bot));
         this.ajouterCommande(new wake_tf_samurai(bot));
+        this.ajouterCommande(new plusOne(bot));
+        this.ajouterCommande(new annoyUser(bot));
 
         this.setNom("Misc");
     }
@@ -55,5 +56,44 @@ class wake_tf_samurai extends Commande {
             e.printStackTrace();
         }
         evt.repondre("exhale made me do it...");
+    }
+}
+
+class plusOne extends Commande {
+    public plusOne(Bot bot) {
+        super(bot);
+        ajouterNom("plus_one");
+        ajouterArg("number", "Number to add 1 to", Argument.Type.INT, false);
+        makeSlashSherpaRun();
+    }
+
+    @Override
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) {
+        List<Argument> l_a = creerArguments(evt);
+
+        Integer i = l_a.get(0).toInt();
+        i++;
+
+        evt.repondre(String.format("Result : %s", i));
+    }
+}
+
+class annoyUser extends Commande {
+    public annoyUser(Bot bot) {
+        super(bot);
+        ajouterNom("annoy");
+        setDescription("Annoy a user");
+        ajouterArg("user", "The user to annoy!", Argument.Type.USER, false);
+        makeSlashSherpaRun();
+    }
+
+    @Override
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) {
+        List<Argument> l_a = creerArguments(evt);
+
+        Integer i = l_a.get(0).toInt();
+        i++;
+
+        evt.repondre(String.format("Result : %s", i));
     }
 }

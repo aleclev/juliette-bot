@@ -1,11 +1,14 @@
 package Adapteurs;
 
+import Discord.Argument;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import net.dv8tion.jda.api.utils.concurrent.Task;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +41,31 @@ public class GuildAdapterJDA extends GuildAdapter {
     }
 
     @Override
-    public void creerSlashCommande(String nom, String desc) {
+    public void creerSlashCommande(String nom, String desc, List<Argument> sig) {
         //TODO: Ajouter plus de paramètres à la création de commandes slash.
         CommandCreateAction ca = original.upsertCommand(nom, desc);
+        for (Argument arg : sig) {
+            OptionType optionType;
+
+            switch (arg.reqType()) {
+                case INT:
+                    optionType = OptionType.INTEGER;
+                    break;
+                case FLOAT:
+                    optionType = OptionType.NUMBER;
+                    break;
+                case STRING:
+                    optionType = OptionType.STRING;
+                    break;
+                case USER:
+                    optionType = OptionType.USER;
+                    break;
+                default:
+                    optionType = OptionType.STRING;
+            }
+
+            ca.addOption(optionType, arg.reqNom(), arg.reqDescription(), !arg.estOptionel());
+        }
         ca.queue();
     }
 

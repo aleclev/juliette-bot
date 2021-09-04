@@ -27,6 +27,11 @@ public class MetaAdapterJDA extends MetaAdapter {
         }
     }
 
+    @Override
+    public UserAdapter stringToUser(String s) {
+        return null;
+    }
+
     /**
      * Retourne un adapteur pour Sherpa Run.
      * @return
