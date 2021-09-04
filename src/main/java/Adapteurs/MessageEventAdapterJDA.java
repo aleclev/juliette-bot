@@ -67,7 +67,10 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
             repondre("ERROR! Missing arguments.");
         } else if (msg == MSGGEN.DB_CONNECT_FAIL) {
             repondre("ERROR! Database connection could not be established. Please report this error if it keeps happening.");
+        } else if (msg == MSGGEN.DISCORD_ID_DNE) {
+            repondre("ERROR! You are not registered on discord. Use `m/register discord` (Provided by Marianne)");
         }
+
         else {
             repondre("ERROR! This message template is not defined. Please report this error.");
         }

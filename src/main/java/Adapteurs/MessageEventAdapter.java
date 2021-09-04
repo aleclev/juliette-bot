@@ -24,6 +24,7 @@ public abstract class MessageEventAdapter {
     //DNE : does not exist
     public enum MSGGEN {
         STEAM_ID_DNE,   //L'idenfiant steam n'est pas enregistré
+        DISCORD_ID_DNE,
         ERREUR_THREAD,  //Erreur générique de thread
         MANQUE_ARGS,     //Arguments manquants
         DB_CONNECT_FAIL

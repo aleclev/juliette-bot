@@ -39,7 +39,7 @@ class steam_joinme extends Commande {
         try {
             AccessMysql accessMysql = reqBot().reqAccessMysql();
             steam_id = accessMysql.reqIdSteam(discord_id);
-            evt.repondre(String.format("Join code of %s\n```css\n/join %s```", evt.reqUtilisateur().reqMention(), steam_id));
+            evt.repondre(String.format("**THIS COMMAND IS DEPRECATED**\nUse `j/bungie joinme` instead. Alias to: `j/b jm`\nYour steam id is `%s`", steam_id));
             accessMysql.eteindre();
         } catch (SQLException throwables) {
             throwables.printStackTrace();

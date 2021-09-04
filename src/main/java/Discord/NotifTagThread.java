@@ -59,6 +59,13 @@ public class NotifTagThread extends Thread {
         float b = rand.nextFloat();
         Color randomColor = new Color(r, g, b);
         eb.addField("Sender", String.format("%s", evt.reqUtilisateur().reqMention()), false);
+
+        try {
+            eb.addField("Bungie Name", String.format("%s", bot.reqAccessMysql().reqBungieNameFromDiscordID(evt.reqIdAuteur())), false);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         eb.addField("Message URL", String.format("[Click to go to message](%s)", evt.reqURL()), false);
         eb.addField("Report Problems", "[Report bugs & get help here](https://discord.com/channels/439563888342859776/878759972962447371/)\n[Join Sherpa Run](https://discord.gg/YC4gXxN)", false);
         eb.setThumbnail("https://cdn.discordapp.com/attachments/740374907883618365/818240712633221140/searchpng.com-notification-icon-png-image-free-download-2.png");

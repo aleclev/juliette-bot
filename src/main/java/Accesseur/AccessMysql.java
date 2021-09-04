@@ -2,12 +2,11 @@ package Accesseur;
 
 import org.json.simple.JSONObject;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 //TODO : ajouter enregSteam et enregDiscord
 /**
- * classe pour envoyer des requêtes à mariannedata.
+ * classe pour envoyer des requêtes à mariannedata et à l'api de bungie.
  */
 public class AccessMysql {
     //Connection connection;
@@ -16,6 +15,7 @@ public class AccessMysql {
     String motPasse;
     String nomBD;
     Connection m_connection;
+    AccessBungie accessBungie;
 
     public AccessMysql(JSONObject config) throws SQLException {
             hote = (String) config.get("bd_nom_hote");
@@ -23,6 +23,7 @@ public class AccessMysql {
             motPasse = (String) config.get("bd_mot_passe");
             nomBD = (String) config.get("bd_nom");
             m_connection = DriverManager.getConnection(String.format("jdbc:mariadb://%s:3306/%s", hote, nomBD), nomUtil, motPasse);
+            accessBungie = new AccessBungieMaison((String)config.get("cleDestiny"));
     }
 
     /**
@@ -34,6 +35,17 @@ public class AccessMysql {
     public boolean estEnregDiscord(long discord_id) throws SQLException {
         Connection connection = reqConnection();
         String res = "SELECT EXISTS(SELECT * FROM utilisateur WHERE discord_id= ?);";
+        PreparedStatement stmnt = connection.prepareStatement(res);
+        stmnt.setLong(1, discord_id);
+        ResultSet rs = stmnt.executeQuery();
+        rs.next();
+
+        return rs.getBoolean(1);
+    }
+
+    public boolean estEnregSteam(long discord_id) throws SQLException {
+        Connection connection = reqConnection();
+        String res = "SELECT EXISTS(SELECT * FROM utilisateur WHERE discord_id= ? AND steam_id IS NOT NULL);";
         PreparedStatement stmnt = connection.prepareStatement(res);
         stmnt.setLong(1, discord_id);
         ResultSet rs = stmnt.executeQuery();
@@ -389,6 +401,20 @@ public class AccessMysql {
     }
 
     /**
+     * Retourne le bungie name à partir du discord_id fourni.
+     * @param discord_id
+     * @return
+     */
+    public String reqBungieNameFromDiscordID(long discord_id) {
+        try {
+            long sid = reqIdSteam(discord_id);
+            return accessBungie.reqBungieNameFromSteamID(sid);
+        } catch (SQLException throwables) {
+            return "Could not fetch Bungie Name";
+        }
+    }
+
+    /**
      *
      * @return une connection mysql utilisable.
      * @throws SQLException
@@ -405,4 +431,6 @@ public class AccessMysql {
             throwables.printStackTrace();
         }
     }
+
+
 }
