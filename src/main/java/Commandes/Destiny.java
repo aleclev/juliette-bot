@@ -49,6 +49,7 @@ class bungieJoinme extends Commande {
         ajouterNom("b jm");
         setDescription("Copies your bungie name if your steam profile is registered.");
         setUtilisation("j/bungie joinme");
+        makeSlashSherpaRun();
     }
 
     @Override

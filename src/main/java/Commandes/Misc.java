@@ -12,8 +12,8 @@ public class Misc extends Module {
         //liste des commandes,
         this.ajouterCommande(new Ping(bot));
         this.ajouterCommande(new wake_tf_samurai(bot));
-        this.ajouterCommande(new plusOne(bot));
-        this.ajouterCommande(new annoyUser(bot));
+        //this.ajouterCommande(new plusOne(bot));
+        //this.ajouterCommande(new annoyUser(bot));
 
         this.setNom("Misc");
     }

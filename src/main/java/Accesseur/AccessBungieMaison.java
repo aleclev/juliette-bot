@@ -24,7 +24,7 @@ public class AccessBungieMaison extends AccessBungie {
         try {
             String apiKey = "ddc2f6cc7bc842a1a2e55a207dc1e1cb";
 
-            String url = String.format("https://www.bungie.net/platform/User/GetMembershipFromHardLinkedCredential/%s/%s/", "12", "76561198177596658");
+            String url = String.format("https://www.bungie.net/platform/User/GetMembershipFromHardLinkedCredential/%s/%s/", "12", steam_id);
 
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -52,7 +52,7 @@ public class AccessBungieMaison extends AccessBungie {
 
             ///////////////////
             // Endpoint for Gjallarhorn
-            url = String.format("https://www.bungie.net/platform/User/GetMembershipsById/%s/%s/", "4611686018471011052", "3");
+            url = String.format("https://www.bungie.net/platform/User/GetMembershipsById/%s/%s/", memid, "3");
 
             obj = new URL(url);
             con = (HttpURLConnection) obj.openConnection();

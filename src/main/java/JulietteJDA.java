@@ -29,6 +29,7 @@ public class JulietteJDA {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableIntents(GatewayIntent.DIRECT_MESSAGES)
                 .enableCache(CacheFlag.CLIENT_STATUS)
                 .setRawEventsEnabled(true)
                 .build();

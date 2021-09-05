@@ -21,7 +21,14 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
     public MessageEventAdapterJDA(MessageReceivedEvent evt) {
         salon = evt.getChannel();
         utilisateur = evt.getAuthor();
-        guild = evt.getGuild();
+
+        if (evt.isFromGuild()) {
+            guild = evt.getGuild();
+        }
+        else {
+            guild = null;
+        }
+
         message = evt.getMessage();
         contenu = message.getContentRaw();
         member = evt.getMember();
