@@ -3,10 +3,12 @@ package Commandes;
 import Adapteurs.EmbedBuilderAdapter;
 import Adapteurs.MessageEventAdapter;
 import Adapteurs.MetaAdapter;
+import CommandPermission.IsOwnerGate;
 import Discord.Bot;
 import Discord.CommandThread;
 import Discord.Commande;
 import Discord.Module;
+import Exceptions.UserNotFoundException;
 import Fonctions.CommandParse;
 import Fonctions.VerificationMessage.VerificateurMemeContexte;
 
@@ -22,12 +24,12 @@ public class Dev extends Module {
 
         //liste des commandes,
         this.ajouterCommande(new messageTest(bot));
-        this.ajouterCommande(new threadTest(bot));
-        this.ajouterCommande(new reponseTest(bot));
-        this.ajouterCommande(new testAttenteLongue(bot));
-        this.ajouterCommande(new testMessagePrivee(bot));
-        this.ajouterCommande(new testEmbed(bot));
-        this.ajouterCommande(new setStatus(bot));
+        //this.ajouterCommande(new threadTest(bot));
+        //this.ajouterCommande(new reponseTest(bot));
+        //this.ajouterCommande(new testAttenteLongue(bot));
+        //this.ajouterCommande(new testMessagePrivee(bot));
+        //this.ajouterCommande(new testEmbed(bot));
+        //this.ajouterCommande(new setStatus(bot));
     }
 }
 
@@ -35,11 +37,12 @@ class messageTest extends Commande {
     public messageTest(Bot bot) {
         super(bot);
         ajouterNom("blocage");
+        this.reqMetadata().setGate(new IsOwnerGate());
     }
 
     @Override
     public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
-
+        evt.repondre("Salut la gang!");
     }
 }
 
@@ -107,7 +110,7 @@ class testMessagePrivee extends Commande {
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException, UserNotFoundException {
 
         EmbedBuilderAdapter eb = evt.reqEmbedBuilder();
         eb.setTitle("title");

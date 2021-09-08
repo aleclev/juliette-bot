@@ -72,13 +72,6 @@ public class NotifTagThread extends Thread {
         eb.setFooter(String.format("j/notif block %s to no longer receive notifications from this user", evt.reqIdAuteur()), null);
         eb.setColor(randomColor);
 
-        try {
-            long steam_id = accessMysql.reqIdSteam(evt.reqIdAuteur());
-            eb.addField("Destiny 2 Join Code", String.format("/join %s", steam_id), false);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
         GuildAdapter guild = evt.reqGuild();
 
         try {

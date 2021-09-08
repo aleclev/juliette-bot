@@ -39,7 +39,7 @@ public class GenerateurGraph {
         JSONObject config = (JSONObject) obj;
 
         JDA jda = JDABuilder.createDefault((String) config.get("jetton")).build();
-        MetaAdapter metaAdapter = new MetaAdapterJDA(jda);
+        MetaAdapter metaAdapter = MetaAdapterJDA.construireMetaAdapter(jda);
         Bot bot = new Bot(config, metaAdapter);
 
         AccessMysql acc = bot.reqAccessMysql();

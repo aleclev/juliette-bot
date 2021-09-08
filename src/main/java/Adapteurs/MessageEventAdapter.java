@@ -1,6 +1,10 @@
 package Adapteurs;
 
+import Discord.Argument;
+import Discord.CommandMetadata;
+
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public abstract class MessageEventAdapter {
 
@@ -19,6 +23,10 @@ public abstract class MessageEventAdapter {
     public abstract GuildAdapter reqGuild();
     public abstract String reqURL();
     public abstract Boolean estSlash();
+    public abstract MetaAdapter reqMetadapter();
+
+    //Fonction de parsing
+    public abstract ArrayList<Argument> genArgs(CommandMetadata metadata);
 
     //messages génériques
     //DNE : does not exist

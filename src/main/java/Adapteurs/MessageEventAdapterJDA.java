@@ -1,50 +1,32 @@
 package Adapteurs;
 
+import Discord.Argument;
+import Discord.CommandMetadata;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
-public class MessageEventAdapterJDA extends MessageEventAdapter {
+public abstract class MessageEventAdapterJDA extends MessageEventAdapter {
 
     private final MessageChannel salon;
     private final User utilisateur;
     private final Member member;
     private final Guild guild;
-    private final Message message;
-    private final Boolean estSlash;
-    private final String contenu;
-    private final SlashCommandEvent slashCommandEvent;
+    private final MessageEventMetadataJDA metadata;
+    //private final Message message;
+    //private final Boolean estSlash;
+    //private final String contenu;
+    //private final SlashCommandEvent slashCommandEvent;
 
-
-    public MessageEventAdapterJDA(MessageReceivedEvent evt) {
-        salon = evt.getChannel();
-        utilisateur = evt.getAuthor();
-
-        if (evt.isFromGuild()) {
-            guild = evt.getGuild();
-        }
-        else {
-            guild = null;
-        }
-
-        message = evt.getMessage();
-        contenu = message.getContentRaw();
-        member = evt.getMember();
-        estSlash = false;
-        slashCommandEvent = null;
-    }
-
-    public MessageEventAdapterJDA(SlashCommandEvent evt) {
-        salon = evt.getChannel();
-        utilisateur = evt.getUser();
-        member = evt.getMember();
-        guild = evt.getGuild();
-        message = null;
-        contenu = evt.getName();
-        estSlash = true;
-        slashCommandEvent = evt;
+    public MessageEventAdapterJDA(MessageEventMetadataJDA p_metadata) {
+        metadata = p_metadata;
+        salon = p_metadata.reqSalon();
+        utilisateur = p_metadata.reqUtilisateur();
+        member = p_metadata.reqMember();
+        guild = p_metadata.reqGuild();
     }
 
     /**
@@ -53,12 +35,7 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
      */
     @Override
     public void repondre(String message) {
-        if (!estSlash) {
-            salon.sendMessage(message).queue();
-        }
-        else {
-            slashCommandEvent.reply(message).queue();
-        }
+        salon.sendMessage(message).queue();
     }
 
     @Override
@@ -105,13 +82,7 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
     }
 
     @Override
-    public String reqContenueRaw() {
-        if (estSlash) {
-            return contenu;
-        }
-
-        return message.getContentRaw();
-    }
+    public abstract String reqContenueRaw();
 
     @Override
     public EmbedBuilderAdapter reqEmbedBuilder() {
@@ -134,16 +105,16 @@ public class MessageEventAdapterJDA extends MessageEventAdapter {
     }
 
     @Override
-    public String reqURL() {
-        if (estSlash) {
-            return "No valid URL";
-        }
-
-        return String.format("https://discordapp.com/channels/%s/%s/%s", guild.getId(), salon.getId(), message.getId());
-    }
+    public abstract String reqURL();
 
     @Override
-    public Boolean estSlash() {
-        return estSlash;
+    public abstract Boolean estSlash();
+
+    @Override
+    public MetaAdapter reqMetadapter() {
+        return MetaAdapterJDA.reqMetaAdapter();
     }
+
+
+    public abstract ArrayList<Argument> genArgs(CommandMetadata metadata);
 }

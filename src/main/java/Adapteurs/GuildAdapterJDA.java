@@ -1,10 +1,15 @@
 package Adapteurs;
 
 import Discord.Argument;
+import Discord.ArgumentMetaData;
+import Discord.CommandMetadata;
+import Discord.CommandSignature;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import net.dv8tion.jda.api.utils.concurrent.Task;
 
@@ -41,10 +46,14 @@ public class GuildAdapterJDA extends GuildAdapter {
     }
 
     @Override
-    public void creerSlashCommande(String nom, String desc, List<Argument> sig) {
+    public void creerSlashCommande(CommandMetadata metadata) {
         //TODO: Ajouter plus de paramètres à la création de commandes slash.
-        CommandCreateAction ca = original.upsertCommand(nom, desc);
-        for (Argument arg : sig) {
+        //String[] nameList = metadata.reqNoms().get(0).split("_");
+        String name = metadata.reqNoms().get(0).replace(" ", "-");
+
+        CommandCreateAction ca = original.upsertCommand(name, metadata.reqDescription());
+
+        for (ArgumentMetaData arg : metadata.reqSignature().reqMetadata()) {
             OptionType optionType;
 
             switch (arg.reqType()) {
@@ -64,9 +73,14 @@ public class GuildAdapterJDA extends GuildAdapter {
                     optionType = OptionType.STRING;
             }
 
-            ca.addOption(optionType, arg.reqNom(), arg.reqDescription(), !arg.estOptionel());
+            ca.addOption(optionType, arg.reqNom(), arg.reqDescription(), !arg.reqOptionel());
         }
         ca.queue();
+    }
+
+    @Override
+    public void resetAllSlashCommands() {
+        original.updateCommands().queue();
     }
 
     Guild original;

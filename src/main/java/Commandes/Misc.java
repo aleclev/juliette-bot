@@ -1,9 +1,16 @@
 package Commandes;
 
 import Adapteurs.MessageEventAdapter;
+import Adapteurs.UserAdapter;
 import Discord.*;
 import Discord.Module;
+import Exceptions.APIException;
+import Exceptions.CommandParseException;
+import Exceptions.MasterException;
+import Exceptions.MessageEventException;
+
 import java.util.List;
+import java.util.Random;
 
 public class Misc extends Module {
     public Misc(Bot bot) {
@@ -12,8 +19,9 @@ public class Misc extends Module {
         //liste des commandes,
         this.ajouterCommande(new Ping(bot));
         this.ajouterCommande(new wake_tf_samurai(bot));
-        //this.ajouterCommande(new plusOne(bot));
-        //this.ajouterCommande(new annoyUser(bot));
+        this.ajouterCommande(new plusOne(bot));
+        this.ajouterCommande(new rng(bot));
+        this.ajouterCommande(new annoyUser(bot));
 
         this.setNom("Misc");
     }
@@ -63,12 +71,12 @@ class plusOne extends Commande {
     public plusOne(Bot bot) {
         super(bot);
         ajouterNom("plus_one");
-        ajouterArg("number", "Number to add 1 to", Argument.Type.INT, false);
+        ajouterArg(new ArgumentMetaData(ArgumentType.INT, false, "number", "Number to add 1 to"));
         makeSlashSherpaRun();
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) {
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws MasterException {
         List<Argument> l_a = creerArguments(evt);
 
         Integer i = l_a.get(0).toInt();
@@ -83,17 +91,57 @@ class annoyUser extends Commande {
         super(bot);
         ajouterNom("annoy");
         setDescription("Annoy a user");
-        ajouterArg("user", "The user to annoy!", Argument.Type.USER, false);
+        ajouterArg(new ArgumentMetaData(ArgumentType.USER, false, "user", "The user to annoy!"));
         makeSlashSherpaRun();
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) {
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws MasterException {
         List<Argument> l_a = creerArguments(evt);
 
-        Integer i = l_a.get(0).toInt();
-        i++;
+        UserAdapter u = l_a.get(0).toUser();
 
-        evt.repondre(String.format("Result : %s", i));
+        evt.repondre(String.format("Name:%s\nID:%s\nMention:%s", u.reqNom(), u.reqId(), u.reqMention()));
+    }
+}
+
+class rng extends Commande {
+    public rng(Bot bot) {
+        super(bot);
+        ajouterNom("rng");
+        setDescription("Generate a random number");
+        ajouterArg(new ArgumentMetaData(ArgumentType.INT, false, "low_bound", "Lowest possible number (inclusive)"));
+        ajouterArg(new ArgumentMetaData(ArgumentType.INT, true, "high_bound", "Highest possible number (inclusive)"));
+
+        makeSlashSherpaRun();
+    }
+
+    @Override
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws MasterException {
+        List<Argument> l_a = creerArguments(evt);
+
+        Long borneInf;
+        Long borneSup;
+
+        if (l_a.size() == 1) {
+            borneInf = 1L;
+            borneSup = l_a.get(0).toLong();
+        }
+        else {
+            borneInf = l_a.get(0).toLong();
+            borneSup = l_a.get(1).toLong();
+        }
+
+        Random rand = new Random(System.currentTimeMillis());
+        long i = rand.nextLong();
+
+        if (i < 0) {
+            i *= -1;
+        }
+
+        i = i % (borneSup-borneInf+1);
+        i += borneInf;
+
+        evt.repondre(String.format("I'm thinking of **%s**", i));
     }
 }

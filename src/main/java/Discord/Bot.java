@@ -39,6 +39,9 @@ public class Bot {
     private final DestinyDTO destinyDTO;
 
     public Bot(JSONObject p_config, MetaAdapter p_metaAdapter) {
+        //Reset des commandes sur sherpa run.
+        p_metaAdapter.resetSherpaRun();
+
         config = p_config;
 
         prefix = (String)config.get("prefix");
@@ -70,6 +73,7 @@ public class Bot {
         this.ajouterModule(new Notif(this));
         this.ajouterModule(new Meta(this));
         this.ajouterModule(new Destiny(this));
+        this.ajouterModule(new Dev(this));
 
         System.out.print("Tous les modules de commandes instanciés avec succès...\n");
     }
@@ -82,6 +86,7 @@ public class Bot {
         l_modules.add(module);
     }
 
+    //TODO : cleanup
     /**
      * This function handles message events from the controller
      * @param evt

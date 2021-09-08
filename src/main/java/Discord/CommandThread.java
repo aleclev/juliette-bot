@@ -1,6 +1,9 @@
 package Discord;
 
 import Adapteurs.MessageEventAdapter;
+import Exceptions.APIException;
+import Exceptions.MasterException;
+import Exceptions.MessageEventException;
 import Fonctions.VerificationMessage.VerificateurAbstrait;
 
 import java.util.concurrent.CountDownLatch;
@@ -20,6 +23,7 @@ public class CommandThread extends Thread {
     public void run() {
         try {
             if (msgEvt != null) {
+                cmd.reqMetadata().reqGate().check(msgEvt);
                 cmd.traitement(msgEvt, this);
                 return;
             }
@@ -30,6 +34,14 @@ public class CommandThread extends Thread {
 
         } catch (InterruptedException e) {
             msgEvt.repondre(MessageEventAdapter.MSGGEN.ERREUR_THREAD);
+        } catch (MessageEventException e) {
+            e.envNotif();
+        } catch (APIException e) {
+            msgEvt.repondre(e.reqMessage());
+        } catch (MasterException e) {
+            msgEvt.repondre("Error! This is a generic error, no info is provided.");
+        } finally {
+            termine = true;
         }
         termine = true;
     }

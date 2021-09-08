@@ -2,10 +2,11 @@ package Commandes;
 
 import Accesseur.AccessMysql;
 import Adapteurs.MessageEventAdapter;
-import Discord.Bot;
-import Discord.CommandThread;
-import Discord.Commande;
+import Discord.*;
 import Discord.Module;
+import Exceptions.APIException;
+import Exceptions.CommandParseException;
+import Exceptions.MasterException;
 import Fonctions.CommandParse;
 import Fonctions.VerificationMessage.VerificateurMemeContexte;
 import Misc.GenerateurGraphNotifTag;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Notif  extends Module {
     public Notif(Bot bot) {
@@ -43,16 +45,22 @@ class updateDnd extends Commande {
         setDescription("Set a number of hours for which you will not receive any notifications (do not disturb).");
         setUtilisation("j/notif dnd <hours>");
         setExemple("j/notif dnd <hours>");
+
+        ajouterArg(new ArgumentMetaData(
+                ArgumentType.INT,
+                false,
+                "hours",
+                "Number of hours for which you will not receive notifications."
+        ));
+
+        makeSlashSherpaRun();
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
-        String[] args = CommandParse.decouperCommande(evt.reqContenueRaw());
-        if (args.length < 3) {
-            evt.repondre(MessageEventAdapter.MSGGEN.MANQUE_ARGS);
-        }
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException, MasterException {
+        var args = creerArguments(evt);
 
-        long hourOffset = Long.parseLong(args[2]);
+        long hourOffset = args.get(0).toLong();
 
         try {
             AccessMysql accessMysql = reqBot().reqAccessMysql();
@@ -70,6 +78,16 @@ class bloquerUtilisateur extends Commande {
     public bloquerUtilisateur(Bot bot) {
         super(bot);
         ajouterNom("notif block");
+
+        ajouterArg(new ArgumentMetaData(
+                ArgumentType.USER,
+                false,
+                "user",
+                "The user you want to block."
+                )
+        );
+
+        makeSlashSherpaRun();
     }
     @Override
     public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
@@ -98,6 +116,8 @@ class retirerTousBlocages extends Commande {
         setDescription("Unblock all previously blocked users.");
         setUtilisation("j/notif unblock_all");
         setExemple("j/notif unblock_all");
+
+        makeSlashSherpaRun();
     }
     @Override
     public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
@@ -126,6 +146,15 @@ class retirerBlocages extends Commande {
         setDescription("Unblock a user");
         setUtilisation("j/notif unblock <discord_id>");
         setExemple("j/notif unblock 1234567890");
+
+        ajouterArg(new ArgumentMetaData(
+                ArgumentType.USER,
+                false,
+                "user",
+                "The user to unblock"
+        ));
+
+        makeSlashSherpaRun();
     }
 
     @Override
@@ -154,7 +183,6 @@ class reqBlacklist extends Commande {
         setDescription("Returns the list of all blocked users.");
         setUtilisation("j/notif blacklist");
         setExemple("j/notif blacklist");
-
     }
 
     @Override
@@ -183,16 +211,21 @@ class ajouterTag extends Commande {
         setDescription("Adds a tag to your list.");
         setUtilisation("j/notif add <tagName>");
         setExemple("j/notif add raid");
+        ajouterArg(new ArgumentMetaData(
+                ArgumentType.STRING,
+                false,
+                "tag",
+                "The tag you want to add to your list"
+        ));
+
+        makeSlashSherpaRun();
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
-        String[] args = CommandParse.decouperCommande(evt.reqContenueRaw());
-        if (args.length < 3) {
-            evt.repondre(MessageEventAdapter.MSGGEN.MANQUE_ARGS);
-        }
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException, MasterException {
+        var args = creerArguments(evt);
 
-        String tag = args[2];
+        String tag = args.get(0).toStr();
 
         try {
             AccessMysql accessMysql = reqBot().reqAccessMysql();
@@ -212,16 +245,22 @@ class enleverTag extends Commande {
         setDescription("Removes a tag from your list.");
         setUtilisation("j/notif del <tagName>");
         setExemple("j/notif del raid");
+
+        ajouterArg(new ArgumentMetaData(
+                ArgumentType.STRING,
+                false,
+                "tag",
+                "The tag you want to add to your list."
+        ));
+
+        makeSlashSherpaRun();
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
-        String[] args = CommandParse.decouperCommande(evt.reqContenueRaw());
-        if (args.length < 3) {
-            evt.repondre(MessageEventAdapter.MSGGEN.MANQUE_ARGS);
-        }
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException, MasterException {
 
-        String tag = args[2];
+        var args = creerArguments(evt);
+        String tag = args.get(0).toStr();
 
         try {
             AccessMysql accessMysql = reqBot().reqAccessMysql();
@@ -241,6 +280,8 @@ class reqTousNotifTags extends Commande {
         setDescription("Returns the list of all your tags.");
         setUtilisation("j/notif list_all");
         setExemple("j/notif_list");
+
+        makeSlashSherpaRun();
     }
 
     @Override
@@ -270,6 +311,8 @@ class retirerTousNotifTags extends Commande {
         setDescription("Removes all of your tags.");
         setUtilisation("j/notif remove_all");
         setExemple("j/notif remove_all");
+
+        makeSlashSherpaRun();
     }
     @Override
     public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
@@ -298,6 +341,8 @@ class reqGraph extends Commande {
         setDescription("Generate a graph of all defined relationships between notification tags.");
         setUtilisation("j/notif graph");
         setExemple("j/notif graph");
+
+        makeSlashSherpaRun();
     }
     @Override
     public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
