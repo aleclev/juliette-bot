@@ -157,13 +157,14 @@ public class CommandParse {
     private static Object[] parseUser(String message, ArgumentMetaData argmd, MetaAdapter ma) throws UserNotFoundException {
         String temp = message.trim();
         String nouv = premierArg(temp);
+        int len = nouv.length();
         nouv = nouv
                 .replace("<", "")
                 .replace(">", "")
                 .replace("@", "")
                 .replace("!", "");
 
-        String r = temp.substring(nouv.length());
+        String r = temp.substring(len);
         UserAdapter u = ma.trouverUtilisateur(Long.parseLong(nouv));
 
         Argument arg = new Argument(u, argmd);

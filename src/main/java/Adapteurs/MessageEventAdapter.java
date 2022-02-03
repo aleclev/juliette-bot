@@ -12,6 +12,7 @@ public abstract class MessageEventAdapter {
     public abstract void repondre(MSGGEN msg);
     public abstract void repondre(EmbedBuilderAdapter embed);
     public abstract void repondre(InputStream is, String nom);
+    public abstract void ajouterReaction(String r);
 
     //getters
     public abstract Long reqIdAuteur();
@@ -23,7 +24,11 @@ public abstract class MessageEventAdapter {
     public abstract GuildAdapter reqGuild();
     public abstract String reqURL();
     public abstract Boolean estSlash();
-    public abstract MetaAdapter reqMetadapter();
+
+    //TODO : Cette méthode est très redondante
+    public MetaAdapter reqMetadapter() {
+        return MetaAdapapterFactory.reqMetaAdapter();
+    }
 
     //Fonction de parsing
     public abstract ArrayList<Argument> genArgs(CommandMetadata metadata);

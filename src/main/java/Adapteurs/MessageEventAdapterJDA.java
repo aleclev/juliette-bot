@@ -3,8 +3,6 @@ package Adapteurs;
 import Discord.Argument;
 import Discord.CommandMetadata;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -109,11 +107,6 @@ public abstract class MessageEventAdapterJDA extends MessageEventAdapter {
 
     @Override
     public abstract Boolean estSlash();
-
-    @Override
-    public MetaAdapter reqMetadapter() {
-        return MetaAdapterJDA.reqMetaAdapter();
-    }
 
 
     public abstract ArrayList<Argument> genArgs(CommandMetadata metadata);

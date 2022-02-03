@@ -13,6 +13,15 @@ public class NormalMessageEventAdapterJDA extends MessageEventAdapterJDA {
         original = evt;
     }
 
+    public void createThread() {
+        //
+    }
+
+    @Override
+    public void ajouterReaction(String r) {
+        original.getMessage().addReaction(r).queue();
+    }
+
     @Override
     public String reqContenueRaw() {
         return original.getMessage().getContentRaw();
@@ -27,7 +36,6 @@ public class NormalMessageEventAdapterJDA extends MessageEventAdapterJDA {
     public Boolean estSlash() {
         return false;
     }
-
 
     @Override
     public ArrayList<Argument> genArgs(CommandMetadata metadata) {

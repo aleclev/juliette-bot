@@ -2,6 +2,7 @@ package Commandes;
 
 import Accesseur.AccessMysql;
 import Adapteurs.MessageEventAdapter;
+import Adapteurs.UserAdapter;
 import Discord.*;
 import Discord.Module;
 import Exceptions.APIException;
@@ -90,13 +91,10 @@ class bloquerUtilisateur extends Commande {
         makeSlashSherpaRun();
     }
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
-        String[] args = CommandParse.decouperCommande(evt.reqContenueRaw());
-        if (args.length < 3) {
-            evt.repondre(MessageEventAdapter.MSGGEN.MANQUE_ARGS);
-        }
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException, MasterException {
+        var args = creerArguments(evt);
 
-        long discord_id = Long.parseLong(args[2]);
+        long discord_id = args.get(0).toUser().reqId();
 
         try {
             AccessMysql accessMysql = reqBot().reqAccessMysql();
@@ -158,13 +156,10 @@ class retirerBlocages extends Commande {
     }
 
     @Override
-    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException {
-        String[] args = CommandParse.decouperCommande(evt.reqContenueRaw());
-        if (args.length < 3) {
-            evt.repondre(MessageEventAdapter.MSGGEN.MANQUE_ARGS);
-        }
+    public void traitement(MessageEventAdapter evt, CommandThread cmdThread) throws InterruptedException, MasterException {
+        var args = creerArguments(evt);
 
-        long discord_id = Long.parseLong(args[2]);
+        long discord_id = args.get(0).toUser().reqId();
 
         try {
             AccessMysql accessMysql = reqBot().reqAccessMysql();

@@ -135,8 +135,11 @@ public class NotifTagThread extends Thread {
             return;
         }
 
+
+
         //prends en note la requête de notification courante.
         notifTagCooldownDTO.logNotif();
+        evt.ajouterReaction("\uD83D\uDE4B");
     }
 
     private boolean utilisateurEnCooldown() {

@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.ArrayList;
 
 public abstract class MetaAdapter {
+
     public abstract UserAdapter trouverUtilisateur(long discord_id) throws UserNotFoundException;
     //public abstract UserAdapter trouverUtilisateurUncached(long discord_id);
     public abstract void setStatusText(PRESENCE pres, String text);

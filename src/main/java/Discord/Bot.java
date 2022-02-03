@@ -40,7 +40,9 @@ public class Bot {
 
     public Bot(JSONObject p_config, MetaAdapter p_metaAdapter) {
         //Reset des commandes sur sherpa run.
-        p_metaAdapter.resetSherpaRun();
+
+        //TODO : Cette fonction doit être modifié afin de ne pas faire chier l'api de discord
+        //p_metaAdapter.resetSherpaRun();
 
         config = p_config;
 
@@ -74,6 +76,7 @@ public class Bot {
         this.ajouterModule(new Meta(this));
         this.ajouterModule(new Destiny(this));
         this.ajouterModule(new Dev(this));
+        //this.ajouterModule(new ToSR(this));
 
         System.out.print("Tous les modules de commandes instanciés avec succès...\n");
     }

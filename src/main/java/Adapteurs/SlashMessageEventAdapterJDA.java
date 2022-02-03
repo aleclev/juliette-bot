@@ -5,6 +5,8 @@ import Discord.ArgumentMetaData;
 import Discord.CommandMetadata;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+
+import javax.security.auth.login.LoginException;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -66,5 +68,10 @@ public class SlashMessageEventAdapterJDA extends MessageEventAdapterJDA {
         else {
             original.reply(m).queue();
         }
+    }
+
+    @Override
+    public void ajouterReaction(String r) {
+        //throw new LoginException();
     }
 }

@@ -26,5 +26,17 @@ public class MemberAdapterJDA extends MemberAdapter {
         return original != null;
     }
 
+    @Override
+    public void ajouterRole(long role_id) {
+        var role = original.getGuild().getRoleById(role_id);
+
+        original.getGuild().addRoleToMember(original, role).queue();
+    }
+
+    @Override
+    public String reqNick() {
+        return original.getEffectiveName();
+    }
+
     Member original;
 }

@@ -1,4 +1,6 @@
 import Interface.InterfaceJDA;
+import Interface.MainWindow;
+import Wrapper.DiscordAPI.DiscordWrapper;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -21,6 +23,12 @@ public class JulietteJDA {
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(new FileReader("./config.json"));
         JSONObject config = (JSONObject) obj;
+
+        DiscordWrapper.configure(config);
+
+        //MainWindow mw = new MainWindow();
+        //mw.pack();
+        //mw.setVisible(true);
 
         System.out.print((String)config.get("nom")+"\n");
 

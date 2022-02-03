@@ -83,7 +83,7 @@ public class AccessBungieMaison extends AccessBungie {
 
             return String.format("%s#%s", name, code);
         }
-        catch (IOException e) {
+        catch (Exception e) {
             return "COULD NOT FETCH NAME";
         }
     }
