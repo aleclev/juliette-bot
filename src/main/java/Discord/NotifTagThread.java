@@ -83,7 +83,7 @@ public class NotifTagThread extends Thread {
                 messageBuilder.append(String.format(" `%s`", tag));
             }
             String message = messageBuilder.toString();
-            message += "... Executing...";
+            message += "... Sending...";
             evt.repondre(message);
 
             rs.last();
@@ -125,7 +125,7 @@ public class NotifTagThread extends Thread {
             accessMysql.eteindre();
             //evt.repondre("All notifications sent...");
 
-            evt.repondre(String.format("All messages sent!\nOnline users found: **%s**\nTotal users found: **%s**", totEnLigne, totUtilisateurs));
+            evt.repondre(String.format("Finished! Users found (online/total): **%s**/**%s**", totEnLigne, totUtilisateurs));
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -140,6 +140,7 @@ public class NotifTagThread extends Thread {
         //prends en note la requête de notification courante.
         notifTagCooldownDTO.logNotif();
         evt.ajouterReaction("\uD83D\uDE4B");
+        evt.createThread(l_tag.get(0));
     }
 
     private boolean utilisateurEnCooldown() {

@@ -13,6 +13,7 @@ public abstract class MessageEventAdapter {
     public abstract void repondre(EmbedBuilderAdapter embed);
     public abstract void repondre(InputStream is, String nom);
     public abstract void ajouterReaction(String r);
+    public abstract void createThread(String threadName);
 
     //getters
     public abstract Long reqIdAuteur();

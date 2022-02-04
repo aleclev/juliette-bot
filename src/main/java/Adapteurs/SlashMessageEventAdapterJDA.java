@@ -74,4 +74,9 @@ public class SlashMessageEventAdapterJDA extends MessageEventAdapterJDA {
     public void ajouterReaction(String r) {
         //throw new LoginException();
     }
+
+    @Override
+    public void createThread(String threadName) {
+
+    }
 }
