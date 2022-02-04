@@ -28,35 +28,14 @@ public class Tests {
 
     @Test
     public void CreateThreadTest() throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        Object obj = parser.parse(new FileReader("./config.json"));
-        JSONObject config = (JSONObject) obj;
+//        JSONParser parser = new JSONParser();
+//        Object obj = parser.parse(new FileReader("./config.json"));
+//        JSONObject config = (JSONObject) obj;
 //
 //        DiscordWrapper.configure(config);
 //        CreateThreadBody body = new CreateThreadBody();
 //        body.name = "some thread";
-//        Threads.createThread(442450151949467649L, 938800473606082600L, body);
-
-
-//        OkHttpClient client = new OkHttpClient().newBuilder()
-//                .build();
-//        MediaType mediaType = MediaType.parse("application/json");
-//        RequestBody body = RequestBody.create(mediaType, "{\r\n    \"name\": \"some_thread\"\r\n}");
-//        Request request = new Request.Builder()
-//                .url("https://discord.com/api/channels/614575166487396552/messages/938975247930122321/threads")
-//                .method("POST", body)
-//                .addHeader("Authorization", "Bot NzUwNzc5NTA3OTYyNjc1MjQw.X0_f5w.e6zpRtGPKY8hQpbDpkC04pJXoGI")
-//                .addHeader("Content-Type", "application/json")
-//                //.addHeader("Cookie", "__dcfduid=cb1160cb4fd811ecb97a42010a0a0e05; __sdcfduid=cb1160cb4fd811ecb97a42010a0a0e055b46474273883dbd42ac97611e8c3ae3ba0c0c705dfcdd6a9a75a44b0f50ce1a")
-//                .build();
-//        Response response = client.newCall(request).execute();
-//
-//        System.out.println(response);
-
-        DiscordWrapper.configure(config);
-        CreateThreadBody body = new CreateThreadBody();
-        body.name = "some thread";
-        Threads.createThread(442450151949467649L, 939016750454960148L, body);
+//        Threads.createThread(442450151949467649L, 939016750454960148L, body);
     }
 
 //    @Test
